@@ -13,8 +13,6 @@
           integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
           crossorigin="anonymous"/>
 
-    <link href="assets/css/style.css" rel="stylesheet">
-
 
 </head>
 <body>
@@ -33,7 +31,7 @@
                     <input type="text" class="form-control p-3"
                            placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette"
                            aria-label="Rechercher un ingrédient, appareil, ustensiles ou une recette"
-                           aria-describedby="button-addon2">
+                           aria-describedby="button-addon2" id="searchBar">
                     <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
                             class="fas fa-search"></i></button>
                 </div>
@@ -76,99 +74,17 @@
         </div>
     </section>
     <section class="container mt-5">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mt-3">
-                <div class="card">
-                    <img src="assets/images/default-recipe-cover.svg" class="card-img-top" alt="">
-                    <div class="card-body row">
-                        <div class="col-8">
-                            <p>Limonade de Coco</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="fw-bold"><i class="far fa-clock"></i> <span>10</span> min</p>
-                        </div>
-                        <div class="col-5">
-                            <p class="fs-6">
-                                <strong>Lait de coco:</strong> 400ml<br>
-                                <strong>Jus de citron:</strong> 2<br>
-                                <strong>Créme de coco:</strong> 4 cuillères<br>
-                                <strong>Sucre:</strong> 20g<br>
-                                <strong>Glaçons:</strong> 2<br>
-                            </p>
-                        </div>
-                        <div class="col-7">
-                            <p class="fs-6">
-                                Mettre les glaçons à votre goût dans le blender, ajouter le lait, la crème de coco, le
-                                jus de 2 citrons et le sucre. Mixer jusqu'à avoir la consistence désirée
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mt-3">
-                <div class="card">
-                    <img src="assets/images/default-recipe-cover.svg" class="card-img-top" alt="">
-                    <div class="card-body row">
-                        <div class="col-8">
-                            <p>Limonade de Coco</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="fw-bold"><i class="far fa-clock"></i> <span>10</span> min</p>
-                        </div>
-                        <div class="col-5">
-                            <p class="fs-6">
-                                <strong>Lait de coco:</strong> 400ml<br>
-                                <strong>Jus de citron:</strong> 2<br>
-                                <strong>Créme de coco:</strong> 4 cuillères<br>
-                                <strong>Sucre:</strong> 20g<br>
-                                <strong>Glaçons:</strong> 2<br>
-                            </p>
-                        </div>
-                        <div class="col-7">
-                            <p class="fs-6">
-                                Mettre les glaçons à votre goût dans le blender, ajouter le lait, la crème de coco, le
-                                jus de 2 citrons et le sucre. Mixer jusqu'à avoir la consistence désirée
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mt-3">
-                <div class="card">
-                    <img src="assets/images/default-recipe-cover.svg" class="card-img-top" alt="">
-                    <div class="card-body row">
-                        <div class="col-8">
-                            <p>Limonade de Coco</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="fw-bold"><i class="far fa-clock"></i> <span>10</span> min</p>
-                        </div>
-                        <div class="col-5">
-                            <p class="fs-6">
-                                <strong>Lait de coco:</strong> 400ml<br>
-                                <strong>Jus de citron:</strong> 2<br>
-                                <strong>Créme de coco:</strong> 4 cuillères<br>
-                                <strong>Sucre:</strong> 20g<br>
-                                <strong>Glaçons:</strong> 2<br>
-                            </p>
-                        </div>
-                        <div class="col-7">
-                            <p class="fs-6">
-                                Mettre les glaçons à votre goût dans le blender, ajouter le lait, la crème de coco, le
-                                jus de 2 citrons et le sucre. Mixer jusqu'à avoir la consistence désirée
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="row" id="sectionRecipe"></div>
     </section>
 </main>
 
 
-<!-- SCRIPT -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <!-- SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous">
+    </script>
+    <script src="data/recipes.js"></script>
+    <script src="assets/js/search.js" type="module"></script>
 </body>
 </html>
