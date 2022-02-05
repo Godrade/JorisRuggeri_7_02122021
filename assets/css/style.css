@@ -1,0 +1,30 @@
+/* .search-ingredients,
+.ingredients,
+#input-utensils,
+.dropdown {
+  color: white;
+  display: flex;
+  height: 70px;
+  margin: 0;
+}
+
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  line-height: 30px;
+}
+
+.dropdown_listbox {
+  height: 60px;
+  width: 135px;
+  margin: 0 30px 0 0;
+  border-radius: 5px;
+}
+.dropdown_listbox i {
+  position: absolute;
+  right: 10px;
+}
+
+.fa-chevron-up {
+  padding: 20px;
+} */
