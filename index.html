@@ -34,56 +34,47 @@
             <div class="col-12">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control p-3"
-                           placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette"
-                           aria-label="Rechercher un ingrédient, appareil, ustensiles ou une recette"
-                           aria-describedby="button-addon2" id="searchBar">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+                           placeholder="Rechercher une recette"
+                           aria-label="Rechercher une recette"
+                           aria-describedby="buttonSearch" id="searchBar">
+                    <button class="btn btn-outline-secondary" type="button" id="buttonSearch"><i
                             class="fas fa-search"></i></button>
                 </div>
 
-                <div class="mb-3" id="tagSection">
-                    
-                </div>
+                <div class="mb-3" id="tagSection"></div>
+
             </div>
-            <!-- <div class="col-md-1 dropdown_listbox ingredients" id="dropdownIngredients">
-                <div class="dropdown-listbox__name" id="listbox-nameIngredient"><span>Ingrédients</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="search-ingredients" id="search-ingredients">
-                    <input type="search" id="input-ingredients" placeholder="Recherche un ingrédient">
-                    <i class="fas fa-chevron-up" id="chevron1"></i>
-                    <div id="listbox-ingredients"></div>
-                </div>
-            </div> -->
             <div class="col-12 d-flex">
-                <div class="dropdown me-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-primary text-white d-none" aria-label="Text input with dropdown button" id="inputIngredients">
-                        <button class="btn btn-primary dropdown-toggle p-3" type="button" id="ingredients"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Ingredients
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="ingredients" id="listIngredients"></ul>
+                <div class="combobox combobox-primary me-2" data-filter="ingredients" id="comboboxIngredients">
+                    <div class="combobox-wrapper">
+                        <div class="combobox-control">
+                            <label for="ingredients" class="combobox-control-label" id="labelIngredients" data-filter-label>Ingredients</label>
+                            <input type="text" placeholder="Rechercher un ingredient" class="combobox-control-input d-none" id="ingredients" data-filter-input>
+                            <button class="combobox-control-expand" data-filter-expand><i class="fas fa-chevron-up text-white"></i></button>
+                        </div>
+                        <ul class="combobox-results d-none" data-filter-results id="listIngredients"></ul>
                     </div>
                 </div>
-                <div class="dropdown me-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-success text-white d-none" aria-label="Text input with dropdown button" id="inputDevices">
-                        <button class="btn btn-success dropdown-toggle p-3" type="button" id="devices"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            Appareil
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="device" id="listDevices"></ul>
+
+                <div class="combobox combobox-success me-2" data-filter="devices" id="comboboxDevices">
+                    <div class="combobox-wrapper">
+                        <div class="combobox-control">
+                            <label for="devices" class="combobox-control-label" id="labelDevices" data-filter-label>Appareil</label>
+                            <input type="text" placeholder="Rechercher un appareil" class="combobox-control-input d-none" id="devices" data-filter-input>
+                            <button class="combobox-control-expand" data-filter-expand><i class="fas fa-chevron-up text-white"></i></button>
+                        </div>
+                        <ul class="combobox-results d-none" data-filter-results id="listDevices"></ul>
                     </div>
                 </div>
-                <div class="dropdown me-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-danger text-white d-none" aria-label="Text input with dropdown button" id="inputUstensiles">
-                        <button class="btn btn-danger dropdown-toggle p-3" type="button" id="ustensiles"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            Ustensiles
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="ustensiles" id="listUstensiles"></ul>
+
+                <div class="combobox combobox-danger" data-filter="ustensiles" id="comboboxUstensiles">
+                    <div class="combobox-wrapper">
+                        <div class="combobox-control">
+                            <label for="ustensiles" class="combobox-control-label" id="labelUstensiles" data-filter-label>Ustensiles</label>
+                            <input type="text" placeholder="Rechercher un ustensiles" class="combobox-control-input d-none" id="ustensiles" data-filter-input>
+                            <button class="combobox-control-expand" data-filter-expand><i class="fas fa-chevron-up text-white"></i></button>
+                        </div>
+                        <ul class="combobox-results d-none" data-filter-results id="listUstensiles"></ul>
                     </div>
                 </div>
             </div>

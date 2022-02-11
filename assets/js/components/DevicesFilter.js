@@ -1,62 +1,126 @@
-export class DevicesFilter {
-  constructor(recipes) {
-    this.devices = this.getDevices(recipes);
-    this.render();
-    this.listeners();
-  }
+import {recipes} from "../data/recipes";
 
-  getDevices(recipes) {
-    let listDevice = new Set();
-    for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
-      listDevice.add(recipes[recipeIndex].appliance);
+export class DevicesFilter {
+
+    devices;
+
+    constructor(recipes) {
+        this.devices = this.getDevices(recipes);
+        this.render();
+        this.listeners();
     }
 
-    return Array.from(listDevice);
-  }
+    getDevices(recipes) {
+        let listDevice = new Set();
+        for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
+            listDevice.add(recipes[recipeIndex].appliance);
+        }
 
-  render() {
-    this.remove();
-    this.devices.forEach((device) => {
-      const listSection = document.getElementById("listDevices");
-      const liElt = document.createElement("li");
+        return Array.from(listDevice);
+    }
 
-      liElt.textContent = device;
-      liElt.style.flexBasis = "200px";
+    render() {
+        this.remove();
+        this.devices.forEach((device) => {
+            const listSection = document.getElementById("listDevices");
+            const liElt = document.createElement("li");
+            liElt.dataset.name = device
 
-      listSection.appendChild(liElt);
-    });
-  }
+            liElt.textContent = device;
+            listSection.appendChild(liElt);
+        });
+    }
 
-  remove(){
-    let recipeItem = document.querySelectorAll("#listDevices li");
-    recipeItem.forEach((element) => {
-      element.remove();
-    });
-  }
+    searchByDevices(recipes, device) {
+        let results = new Set();
 
-  listeners(){
-    const inputDevices = document.getElementById('inputDevices');
-    document.getElementById('devices').addEventListener('click', (e) => {
-      if (inputDevices.classList.contains('d-none')){
-        inputDevices.classList.remove("d-none")
-      } else {
-        inputDevices.classList.add("d-none")
-      }
-    })
+        // trie
+        for (let index = 0; index < recipes.length; index++) {
+            if (recipes[index].appliance.toLowerCase().includes(device.toLowerCase())) {
+                results.add(recipes[index].appliance)
+            }
+        }
 
-    //SearchBar Tag
-    const tagSection = document.getElementById('tagSection');
-      
+        this.devices = Array.from(results);
+        this.render()
+    }
 
-    inputDevices.addEventListener('change', (e) => {
-      const tag = document.createElement('span');
-      tag.className = 'badge rounded-pill bg-success me-1';
-      tag.id = inputDevices.value;
+    remove() {
+        let recipeItem = document.querySelectorAll("#listDevices li");
+        recipeItem.forEach((element) => {
+            element.remove();
+        });
+    }
 
-      const templatePage = `${inputDevices.value} <i class="far fa-times-circle"></i>`
+    listeners() {
+        const inputDevices = document.getElementById('devices');
+        document.getElementById('comboboxDevices').addEventListener('click', (e) => {
+            this.toggle(inputDevices)
+        })
 
-      tagSection.appendChild(tag)
-      tag.innerHTML = templatePage;
-    })
-  }
+        //Click Tag
+        let recipeItem = document.querySelectorAll("#listDevices li");
+        recipeItem.forEach((element) => {
+            element.addEventListener('click', (e) => {
+                this.addTag(element.getAttribute('data-name'));
+            })
+        });
+
+        //Click Remove Tag
+        let tagList = document.querySelectorAll("span .badge i");
+        tagList.forEach((element) => {
+            element.addEventListener('click', (e) => {
+                element.remove()
+            })
+        });
+
+        //SearchBar Tag
+        inputDevices.addEventListener('keydown', (e) => {
+            if (inputDevices.value.trim().length > 1) {
+                this.searchByDevices(recipes, inputDevices.value.trim())
+            } else {
+                this.devices = this.getDevices(recipes)
+                this.render()
+            }
+        })
+
+    }
+
+    addTag(tagName) {
+        console.log(tagName);
+        const tagSection = document.getElementById('tagSection');
+        const tag = document.createElement('span');
+        tag.className = 'badge rounded-pill bg-success me-1';
+        tag.id = tagName;
+        tag.dataset.name = tagName;
+
+        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`
+
+        tagSection.appendChild(tag)
+        tag.innerHTML = templatePage;
+
+    }
+
+    toggle(inputDevices) {
+        const label = document.getElementById('labelDevices')
+        const combobox = document.getElementById('comboboxDevices')
+        const list = document.getElementById('listDevices')
+
+        if (inputDevices.classList.contains('d-none')) {
+            inputDevices.classList.remove("d-none")
+            label.classList.add('d-none')
+            combobox.classList.add('expanded')
+            list.classList.remove('d-none')
+        } else {
+            inputDevices.classList.add("d-none")
+            label.classList.remove('d-none')
+            combobox.classList.remove('expanded')
+            list.classList.add('d-none')
+        }
+
+        const searchIngredient = document.getElementById('devices');
+        searchIngredient.addEventListener('keyup', () => {
+
+        })
+    }
 }

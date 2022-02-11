@@ -23,7 +23,7 @@ export class RecipeResults {
         "recipe col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mt-3";
 
       divElt.id = recipe.id;
-      const templatePage = `<div class="card">
+      const templatePage = `<div class="card h-100">
         <img src="assets/images/default-recipe-cover.svg" class="card-img-top" alt="">
         <div class="card-body row">
             <div class="col-8">
@@ -40,7 +40,7 @@ export class RecipeResults {
                 </ul>
             </div>
             <div class="col-7">
-                <p class="fs-6">
+                <p class="card-description">
                 ${recipe["description"]}
                 </p>
             </div>
