@@ -7,7 +7,6 @@ export class IngredientsFilter {
     constructor(recipes) {
         this.ingredients = this.getIngredients(recipes);
         this.render();
-        this.listeners();
     }
 
     getIngredients(recipes) {
@@ -43,8 +42,8 @@ export class IngredientsFilter {
         // trie
         for (let index = 0; index < recipes.length; index++) {
             for (let indexU = 0; indexU < recipes[index].ingredients.length; indexU++) {
-                if (recipes[index].ingredients[indexU].ingredient.toLowerCase().includes(ingredient.toLowerCase())) {
-                    results.add(recipes[index].ingredients[index].ingredient)
+                if (recipes[index].ingredients[indexU].ingredient.toLowerCase().indexOf(ingredient.toLowerCase()) != -1) {
+                    results.add(recipes[index].ingredients[indexU].ingredient.toLowerCase())
                 }
             }
         }
@@ -67,22 +66,6 @@ export class IngredientsFilter {
             this.toggle(inputIngredients);
         })
 
-        //Click Tag
-        let recipeItem = document.querySelectorAll("#listIngredients li");
-        recipeItem.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                this.addTag(element.getAttribute('data-name'));
-            })
-        });
-
-        //Click Remove Tag
-        let tagList = document.querySelectorAll("span .badge i");
-        tagList.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                element.remove()
-            })
-        });
-
         //SearchBar Tag
         inputIngredients.addEventListener('keydown', (e) => {
             if (inputIngredients.value.trim().length > 1) {
@@ -94,18 +77,7 @@ export class IngredientsFilter {
         })
     }
 
-    addTag(tagName) {
-        const tagSection = document.getElementById('tagSection');
-        const tag = document.createElement('span');
-        tag.className = 'badge rounded-pill bg-primary me-1';
-        tag.id = tagName;
-        tag.dataset.name = tagName;
-
-        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`
-
-        tagSection.appendChild(tag)
-        tag.innerHTML = templatePage;
-    }
+    
 
     toggle(inputIngredients) {
         const label = document.getElementById('labelIngredients')

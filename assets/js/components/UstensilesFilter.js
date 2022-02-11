@@ -1,13 +1,17 @@
-import {recipes} from "../../../OLD/data/recipes";
+import {recipes} from "../data/recipes";
 
 export class UstensilesFilter {
 
     ustensiles;
+    existe = false;
 
     constructor(recipes) {
         this.ustensiles = this.getUstensiles(recipes);
+        if (this.existe){
+            throw new Error('Existe')
+        }
+        this.existe = true;
         this.render();
-        this.listeners();
     }
 
     getUstensiles(recipes) {
@@ -31,6 +35,8 @@ export class UstensilesFilter {
             liElt.textContent = ustensile;
             listSection.appendChild(liElt);
         });
+
+        this.listeners();
     }
 
     searchByUstensile(recipes, ustensile) {
@@ -40,7 +46,7 @@ export class UstensilesFilter {
         for (let index = 0; index < recipes.length; index++) {
             for (let indexU = 0; indexU < recipes[index].ustensils.length; indexU++) {
                 if (recipes[index].ustensils[indexU].toLowerCase().includes(ustensile.toLowerCase())) {
-                    results.add(recipes[index].ustensils[indexU])
+                    results.add(recipes[index].ustensils[indexU].toLowerCase())
                 }
             }
         }
@@ -57,26 +63,13 @@ export class UstensilesFilter {
     }
 
     listeners() {
+        console.log(1);
         const inputUstensiles = document.getElementById('ustensiles');
         document.getElementById('comboboxUstensiles').addEventListener('click', (e) => {
+            console.log(inputUstensiles);
+
             this.toggle(inputUstensiles)
         })
-
-        //Click Tag
-        let recipeItem = document.querySelectorAll("#listUstensiles li");
-        recipeItem.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                this.addTag(element.getAttribute('data-name'));
-            })
-        });
-
-        //Click Remove Tag
-        let tagList = document.querySelectorAll("span .badge i");
-        tagList.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                element.remove()
-            })
-        });
 
         //SearchBar Tag
         inputUstensiles.addEventListener('keydown', (e) => {
@@ -89,24 +82,13 @@ export class UstensilesFilter {
         })
     }
 
-    addTag(tagName) {
-        const tagSection = document.getElementById('tagSection');
-        const tag = document.createElement('span');
-        tag.className = 'badge rounded-pill bg-danger me-1';
-        tag.id = tagName;
-        tag.dataset.name = tagName;
-
-        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`
-
-        tagSection.appendChild(tag)
-        tag.innerHTML = templatePage;
-
-    }
-
     toggle(inputUstensiles) {
+        console.log('toogle');
         const label = document.getElementById('labelUstensiles')
         const combobox = document.getElementById('comboboxUstensiles')
         const list = document.getElementById('listUstensiles')
+
+        console.log(inputUstensiles.classList);
 
         if (inputUstensiles.classList.contains('d-none')) {
             inputUstensiles.classList.remove("d-none")

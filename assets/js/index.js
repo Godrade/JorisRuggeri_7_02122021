@@ -14,18 +14,24 @@ class Index {
         // ajout d'une variable pour chaque filtre
 
         this.render();
-        this.listeners();
+        this.listeners()
     }
 
     render() {
+        
+
         new RecipeResults(this.results);
         new DevicesFilter(this.results);
         new IngredientsFilter(this.results);
         new UstensilesFilter(this.results);
         // appeler les autre composants (les autre filtres)
+
+        
     }
 
     listeners() {
+        console.log(1);
+
         const searchBar = document.getElementById("searchBar");
 
         searchBar.addEventListener("change", (e) => {
@@ -39,6 +45,62 @@ class Index {
         });
 
         // listener pour chaque filtres (quand on click sur un élément et les inputs des filtres)
+        let ingredients = document.querySelectorAll("#listIngredients li");
+        console.log(ingredients);
+        ingredients.forEach((ingredient) => {
+            ingredient.addEventListener('click', (e) => {
+                console.log('tag');
+                this.ingredient = ingredient.getAttribute('data-name');
+                this.addTag(ingredient.getAttribute('data-name'), "primary");
+                this.removeTagListener();
+                this.querySearch();
+            })
+        });
+
+        let devices = document.querySelectorAll("#listDevices li");
+        devices.forEach((device) => {
+            device.addEventListener('click', (e) => {
+                this.device = device.getAttribute('data-name');
+                this.addTag(device.getAttribute('data-name'), 'success');
+                this.removeTagListener();
+                this.querySearch();
+            })
+        });
+
+        let ustensiles = document.querySelectorAll("#listUstensiles li");
+        ustensiles.forEach((ustensile) => {
+            ustensile.addEventListener('click', (e) => {
+                this.ustensile = ustensile.getAttribute('data-name');
+                this.addTag(ustensile.getAttribute('data-name'), 'danger');
+                this.removeTagListener();
+                this.querySearch();
+            })
+        });
+    }
+
+    addTag(tagName, color) {
+        const tagSection = document.getElementById('tagSection');
+        const tag = document.createElement('span');
+        tag.className = `badge rounded-pill bg-${color} me-1`;
+        tag.id = tagName;
+        tag.dataset.name = tagName;
+
+        console.log(tagName);
+
+        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`
+
+        tagSection.appendChild(tag)
+        tag.innerHTML = templatePage;
+    }
+
+    removeTagListener(){
+        //Click Remove Tag
+        const tagList = document.querySelectorAll(".badge i");
+        tagList.forEach((element) => {
+            element.addEventListener('click', (e) => {
+                element.closest('.badge').remove()
+            })
+        });
     }
 
     querySearch() {
@@ -51,6 +113,7 @@ class Index {
         // donner à la méthode search tout les filtres en courant
         this.search(this.request, this.device, this.ustensile, this.ingredient);
         this.render();
+        this.listeners()
     }
 
     search(request, device, ustensile, ingredient) {
@@ -62,7 +125,6 @@ class Index {
         results = this.searchByIngredient(results, ingredient);
 
         this.results = results;
-        console.log(results, ingredient);
     }
 
     searchAllByRequest(request) {

@@ -7,13 +7,12 @@ export class DevicesFilter {
     constructor(recipes) {
         this.devices = this.getDevices(recipes);
         this.render();
-        this.listeners();
     }
 
     getDevices(recipes) {
         let listDevice = new Set();
         for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
-            listDevice.add(recipes[recipeIndex].appliance);
+            listDevice.add(recipes[recipeIndex].appliance.toLowerCase());
         }
 
         return Array.from(listDevice);
@@ -58,22 +57,6 @@ export class DevicesFilter {
             this.toggle(inputDevices)
         })
 
-        //Click Tag
-        let recipeItem = document.querySelectorAll("#listDevices li");
-        recipeItem.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                this.addTag(element.getAttribute('data-name'));
-            })
-        });
-
-        //Click Remove Tag
-        let tagList = document.querySelectorAll("span .badge i");
-        tagList.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                element.remove()
-            })
-        });
-
         //SearchBar Tag
         inputDevices.addEventListener('keydown', (e) => {
             if (inputDevices.value.trim().length > 1) {
@@ -85,22 +68,6 @@ export class DevicesFilter {
         })
 
     }
-
-    addTag(tagName) {
-        console.log(tagName);
-        const tagSection = document.getElementById('tagSection');
-        const tag = document.createElement('span');
-        tag.className = 'badge rounded-pill bg-success me-1';
-        tag.id = tagName;
-        tag.dataset.name = tagName;
-
-        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`
-
-        tagSection.appendChild(tag)
-        tag.innerHTML = templatePage;
-
-    }
-
     toggle(inputDevices) {
         const label = document.getElementById('labelDevices')
         const combobox = document.getElementById('comboboxDevices')
