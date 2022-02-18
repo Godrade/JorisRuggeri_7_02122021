@@ -4,34 +4,35 @@ import {UstensilesFilter} from "./components/UstensilesFilter.js";
 import {IngredientsFilter} from "./components/IngredientsFilter.js";
 import {recipes} from "./data/recipes.js";
 
-class Index {
-    constructor() {
+class App {
+    deviceFilter;
+    ingredientsFilter;
+    ustensilesFilter;
+
+    constructor(deviceFilter, ingredientsFilter, ustensilesFilter) {
         this.results = recipes;
         this.request = "";
-        this.device = "";
-        this.ustensile = "";
-        this.ingredient = "";
-        // ajout d'une variable pour chaque filtre
+        this.device = new Set();
+        this.ustensile = new Set();
+        this.ingredient = new Set();
+
+        this.deviceFilter = deviceFilter;
+        this.ingredientsFilter = ingredientsFilter;
+        this.ustensilesFilter = ustensilesFilter;
 
         this.render();
-        this.listeners()
+        this.listeners();
     }
 
     render() {
-        
-
         new RecipeResults(this.results);
-        new DevicesFilter(this.results);
-        new IngredientsFilter(this.results);
-        new UstensilesFilter(this.results);
-        // appeler les autre composants (les autre filtres)
 
-        
+        this.deviceFilter.render(this.results);
+        this.ingredientsFilter.render(this.results);
+        this.ustensilesFilter.render(this.results);
     }
 
     listeners() {
-        console.log(1);
-
         const searchBar = document.getElementById("searchBar");
 
         searchBar.addEventListener("change", (e) => {
@@ -44,63 +45,64 @@ class Index {
             }
         });
 
-        // listener pour chaque filtres (quand on click sur un élément et les inputs des filtres)
-        let ingredients = document.querySelectorAll("#listIngredients li");
-        console.log(ingredients);
+        const ingredients = document.querySelectorAll("#listIngredients li");
         ingredients.forEach((ingredient) => {
-            ingredient.addEventListener('click', (e) => {
-                console.log('tag');
-                this.ingredient = ingredient.getAttribute('data-name');
-                this.addTag(ingredient.getAttribute('data-name'), "primary");
-                this.removeTagListener();
-                this.querySearch();
-            })
+            ingredient.addEventListener("click", (e) => {
+                this.ingredient.add(ingredient.getAttribute("data-name"));
+                this.addTag(ingredient.getAttribute("data-name"), "primary");
+            });
         });
 
-        let devices = document.querySelectorAll("#listDevices li");
+        const devices = document.querySelectorAll("#listDevices li");
         devices.forEach((device) => {
-            device.addEventListener('click', (e) => {
-                this.device = device.getAttribute('data-name');
-                this.addTag(device.getAttribute('data-name'), 'success');
-                this.removeTagListener();
-                this.querySearch();
-            })
+            device.addEventListener("click", (e) => {
+                this.device.add(device.getAttribute("data-name"));
+                this.addTag(device.getAttribute("data-name"), "success");
+            });
         });
 
-        let ustensiles = document.querySelectorAll("#listUstensiles li");
+        const ustensiles = document.querySelectorAll("#listUstensiles li");
         ustensiles.forEach((ustensile) => {
-            ustensile.addEventListener('click', (e) => {
-                this.ustensile = ustensile.getAttribute('data-name');
-                this.addTag(ustensile.getAttribute('data-name'), 'danger');
-                this.removeTagListener();
+            ustensile.addEventListener("click", (e) => {
+                this.ustensile.add(ustensile.getAttribute("data-name"));
+                this.addTag(ustensile.getAttribute("data-name"), "danger");
+            });
+        });
+
+        const tagList = document.querySelectorAll(".badge i");
+        tagList.forEach((element) => {
+            element.addEventListener("click", (e) => {
+                const badge = element.closest(".badge");
+                console.log({badge});
+
+                if (Array.from(this.device).includes(badge.id)) {
+                    this.device.delete(badge.id);
+                }
+                if (Array.from(this.ingredient).includes(badge.id)) {
+                    this.ingredient.delete(badge.id);
+                }
+                if (Array.from(this.ustensile).includes(badge.id)) {
+                    this.ustensile.delete(badge.id);
+                }
+                badge.remove();
                 this.querySearch();
-            })
+            });
         });
     }
 
     addTag(tagName, color) {
-        const tagSection = document.getElementById('tagSection');
-        const tag = document.createElement('span');
+        const tagSection = document.getElementById("tagSection");
+        const tag = document.createElement("span");
         tag.className = `badge rounded-pill bg-${color} me-1`;
         tag.id = tagName;
         tag.dataset.name = tagName;
 
-        console.log(tagName);
+        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`;
 
-        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`
-
-        tagSection.appendChild(tag)
+        tagSection.appendChild(tag);
         tag.innerHTML = templatePage;
-    }
 
-    removeTagListener(){
-        //Click Remove Tag
-        const tagList = document.querySelectorAll(".badge i");
-        tagList.forEach((element) => {
-            element.addEventListener('click', (e) => {
-                element.closest('.badge').remove()
-            })
-        });
+        this.querySearch();
     }
 
     querySearch() {
@@ -109,20 +111,18 @@ class Index {
             element.remove();
         });
 
-        console.log(this.ingredient);
-        // donner à la méthode search tout les filtres en courant
         this.search(this.request, this.device, this.ustensile, this.ingredient);
         this.render();
-        this.listeners()
+        this.listeners();
     }
 
-    search(request, device, ustensile, ingredient) {
+    search(request, device, ustensile, ingredients) {
         let results = [];
 
         results = this.searchAllByRequest(request);
         results = this.searchByDevice(results, device);
         results = this.searchByUstensile(results, ustensile);
-        results = this.searchByIngredient(results, ingredient);
+        results = this.searchByIngredient(results, ingredients);
 
         this.results = results;
     }
@@ -157,11 +157,16 @@ class Index {
 
     searchByDevice(recipes, device) {
         let results = new Set();
+        device = Array.from(device);
 
         // trie
-        for (let index = 0; index < recipes.length; index++) {
-            if (recipes[index].appliance.toLowerCase().includes(device.toLowerCase())) {
-                results.add(recipes[index])
+        for (let arrayDevices = 0; arrayDevices < device.length; arrayDevices++) {
+            for (let index = 0; index < recipes.length; index++) {
+                if (
+                    recipes[index].appliance.toLowerCase().includes(device[arrayDevices].toLowerCase())
+                ) {
+                    results.add(recipes[index]);
+                }
             }
         }
 
@@ -170,12 +175,19 @@ class Index {
 
     searchByUstensile(recipes, ustensile) {
         let results = new Set();
+        ustensile = Array.from(ustensile);
 
         // trie
-        for (let index = 0; index < recipes.length; index++) {
-            for (let indexU = 0; indexU < recipes[index].ustensils.length; indexU++) {
-                if (recipes[index].ustensils[indexU].toLowerCase().includes(ustensile.toLowerCase())) {
-                    results.add(recipes[index])
+        for (let arrayUstensiles = 0; arrayUstensiles < ustensile.length; arrayUstensiles++) {
+            for (let index = 0; index < recipes.length; index++) {
+                for (let indexU = 0; indexU < recipes[index].ustensils.length; indexU++) {
+                    if (
+                        recipes[index].ustensils[indexU]
+                            .toLowerCase()
+                            .includes(ustensile[arrayUstensiles].toLowerCase())
+                    ) {
+                        results.add(recipes[index]);
+                    }
                 }
             }
         }
@@ -185,12 +197,19 @@ class Index {
 
     searchByIngredient(recipes, ingredient) {
         let results = new Set();
+        ingredient = Array.from(ingredient);
 
         // trie
-        for (let index = 0; index < recipes.length; index++) {
-            for (let indexU = 0; indexU < recipes[index].ingredients.length; indexU++) {
-                if (recipes[index].ingredients[indexU].ingredient.toLowerCase().includes(ingredient.toLowerCase())) {
-                    results.add(recipes[index])
+        for (let arrayIngredients = 0; arrayIngredients < ingredient.length; arrayIngredients++) {
+            for (let index = 0; index < recipes.length; index++) {
+                for (let indexU = 0; indexU < recipes[index].ingredients.length; indexU++) {
+                    if (
+                        recipes[index].ingredients[indexU].ingredient
+                            .toLowerCase()
+                            .includes(ingredient[arrayIngredients].toLowerCase())
+                    ) {
+                        results.add(recipes[index]);
+                    }
                 }
             }
         }
@@ -199,4 +218,7 @@ class Index {
     }
 }
 
-new Index();
+const deviceFilter = new DevicesFilter();
+const ingredientsFilter = new IngredientsFilter();
+const ustensilesFilter = new UstensilesFilter();
+new App(deviceFilter, ingredientsFilter, ustensilesFilter);

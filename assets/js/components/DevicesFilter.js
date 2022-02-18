@@ -1,12 +1,10 @@
 import {recipes} from "../data/recipes";
 
 export class DevicesFilter {
-
-    devices;
-
-    constructor(recipes) {
-        this.devices = this.getDevices(recipes);
+    constructor() {
+        this.devices = new Set();
         this.render();
+        this.listeners();
     }
 
     getDevices(recipes) {
@@ -18,12 +16,17 @@ export class DevicesFilter {
         return Array.from(listDevice);
     }
 
-    render() {
+    render(recipes) {
         this.remove();
+
+        if (recipes) {
+            this.devices = this.getDevices(recipes);
+        }
+
         this.devices.forEach((device) => {
             const listSection = document.getElementById("listDevices");
             const liElt = document.createElement("li");
-            liElt.dataset.name = device
+            liElt.dataset.name = device;
 
             liElt.textContent = device;
             listSection.appendChild(liElt);
@@ -35,13 +38,15 @@ export class DevicesFilter {
 
         // trie
         for (let index = 0; index < recipes.length; index++) {
-            if (recipes[index].appliance.toLowerCase().includes(device.toLowerCase())) {
-                results.add(recipes[index].appliance)
+            if (
+                recipes[index].appliance.toLowerCase().includes(device.toLowerCase())
+            ) {
+                results.add(recipes[index].appliance);
             }
         }
 
         this.devices = Array.from(results);
-        this.render()
+        this.render();
     }
 
     remove() {
@@ -52,42 +57,43 @@ export class DevicesFilter {
     }
 
     listeners() {
-        const inputDevices = document.getElementById('devices');
-        document.getElementById('comboboxDevices').addEventListener('click', (e) => {
-            this.toggle(inputDevices)
-        })
+        const inputDevices = document.getElementById("devices");
+        document
+            .getElementById("comboboxDevices")
+            .addEventListener("click", (e) => {
+                this.toggle(inputDevices);
+            });
 
         //SearchBar Tag
-        inputDevices.addEventListener('keydown', (e) => {
+        inputDevices.addEventListener("keydown", (e) => {
             if (inputDevices.value.trim().length > 1) {
-                this.searchByDevices(recipes, inputDevices.value.trim())
+                this.searchByDevices(recipes, inputDevices.value.trim());
             } else {
-                this.devices = this.getDevices(recipes)
-                this.render()
+                this.devices = this.getDevices(recipes);
+                this.render();
             }
-        })
-
+        });
     }
-    toggle(inputDevices) {
-        const label = document.getElementById('labelDevices')
-        const combobox = document.getElementById('comboboxDevices')
-        const list = document.getElementById('listDevices')
 
-        if (inputDevices.classList.contains('d-none')) {
-            inputDevices.classList.remove("d-none")
-            label.classList.add('d-none')
-            combobox.classList.add('expanded')
-            list.classList.remove('d-none')
+    toggle(inputDevices) {
+        const label = document.getElementById("labelDevices");
+        const combobox = document.getElementById("comboboxDevices");
+        const list = document.getElementById("listDevices");
+
+        if (inputDevices.classList.contains("d-none")) {
+            inputDevices.classList.remove("d-none");
+            label.classList.add("d-none");
+            combobox.classList.add("expanded");
+            list.classList.remove("d-none");
         } else {
-            inputDevices.classList.add("d-none")
-            label.classList.remove('d-none')
-            combobox.classList.remove('expanded')
-            list.classList.add('d-none')
+            inputDevices.classList.add("d-none");
+            label.classList.remove("d-none");
+            combobox.classList.remove("expanded");
+            list.classList.add("d-none");
         }
 
-        const searchIngredient = document.getElementById('devices');
-        searchIngredient.addEventListener('keyup', () => {
-
-        })
+        const searchIngredient = document.getElementById("devices");
+        searchIngredient.addEventListener("keyup", () => {
+        });
     }
 }
