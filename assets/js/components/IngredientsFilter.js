@@ -9,15 +9,12 @@ export class IngredientsFilter {
 
     getIngredients(recipes) {
         let listIngredient = new Set();
-        for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
-            for (
-                let index = 0;
-                index < recipes[recipeIndex].ingredients.length;
-                index++
-            ) {
-                listIngredient.add(recipes[recipeIndex].ingredients[index].ingredient);
-            }
-        }
+
+        recipes.map((recipe) => {
+            recipe.ingredients.map((ingredient) => {
+                listIngredient.add(ingredient.ingredient);
+            });
+        });
 
         return Array.from(listIngredient);
     }
@@ -41,23 +38,14 @@ export class IngredientsFilter {
         let results = new Set();
 
         // trie
-        for (let index = 0; index < recipes.length; index++) {
-            for (
-                let indexU = 0;
-                indexU < recipes[index].ingredients.length;
-                indexU++
-            ) {
-                if (
-                    recipes[index].ingredients[indexU].ingredient
-                        .toLowerCase()
-                        .indexOf(ingredient.toLowerCase()) != -1
-                ) {
-                    results.add(
-                        recipes[index].ingredients[indexU].ingredient.toLowerCase()
-                    );
+
+        recipes.map((recipe) => {
+            recipe.ingredients.map((ingredientsList) => {
+                if (ingredientsList.ingredient.toLowerCase().indexOf(ingredient.toLowerCase()) !== -1) {
+                    results.add(ingredientsList.ingredient.toLowerCase());
                 }
-            }
-        }
+            });
+        });
 
         this.ingredients = Array.from(results);
         this.render();

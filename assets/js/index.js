@@ -12,6 +12,7 @@ class App {
     constructor(deviceFilter, ingredientsFilter, ustensilesFilter) {
         this.results = recipes;
         this.request = "";
+
         this.device = new Set();
         this.ustensile = new Set();
         this.ingredient = new Set();
@@ -129,29 +130,26 @@ class App {
 
     searchAllByRequest(request) {
         let results = [];
-        for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
-            const wordName = recipes[recipeIndex].name.toLowerCase();
-            const wordDescription = recipes[recipeIndex].description.toLowerCase();
+
+        recipes.map((recipe) => {
+            const wordName = recipe.name.toLowerCase();
+            const wordDescription = recipe.description.toLowerCase();
             let wordIngredient = [];
 
-            for (
-                let index = 0;
-                index < recipes[recipeIndex].ingredients.length;
-                index++
-            ) {
+            recipe.ingredients.map((ingredient) => {
                 wordIngredient.push(
-                    recipes[recipeIndex].ingredients[index].ingredient.toLowerCase()
+                    ingredient.ingredient.toLowerCase()
                 );
-            }
+            });
 
             if (
                 wordName.toLowerCase().includes(request) ||
                 wordDescription.includes(request) ||
                 wordIngredient.includes(request)
             ) {
-                results.push(recipes[recipeIndex]);
+                results.push(recipe);
             }
-        }
+        });
         return results;
     }
 
@@ -160,38 +158,37 @@ class App {
         device = Array.from(device);
 
         // trie
-        for (let arrayDevices = 0; arrayDevices < device.length; arrayDevices++) {
-            for (let index = 0; index < recipes.length; index++) {
+        device.map((deviceName) => {
+            recipes.map((recipe) => {
                 if (
-                    recipes[index].appliance.toLowerCase().includes(device[arrayDevices].toLowerCase())
+                    recipe.appliance.toLowerCase().includes(deviceName.toLowerCase())
                 ) {
-                    results.add(recipes[index]);
+                    results.add(recipe);
                 }
-            }
-        }
-
+            });
+        });
         return Array.from(results);
     }
+
 
     searchByUstensile(recipes, ustensile) {
         let results = new Set();
         ustensile = Array.from(ustensile);
 
         // trie
-        for (let arrayUstensiles = 0; arrayUstensiles < ustensile.length; arrayUstensiles++) {
-            for (let index = 0; index < recipes.length; index++) {
-                for (let indexU = 0; indexU < recipes[index].ustensils.length; indexU++) {
+        ustensile.map((deviceName) => {
+            recipes.map((recipe) => {
+                recipe.ustensils.map((ustensil) => {
                     if (
-                        recipes[index].ustensils[indexU]
+                        ustensil
                             .toLowerCase()
-                            .includes(ustensile[arrayUstensiles].toLowerCase())
+                            .includes(ustensil.toLowerCase())
                     ) {
-                        results.add(recipes[index]);
+                        results.add(recipe);
                     }
-                }
-            }
-        }
-
+                });
+            });
+        });
         return Array.from(results);
     }
 
@@ -200,19 +197,19 @@ class App {
         ingredient = Array.from(ingredient);
 
         // trie
-        for (let arrayIngredients = 0; arrayIngredients < ingredient.length; arrayIngredients++) {
-            for (let index = 0; index < recipes.length; index++) {
-                for (let indexU = 0; indexU < recipes[index].ingredients.length; indexU++) {
+        ingredient.map((ingredientName) => {
+            recipes.map((recipe) => {
+                recipe.ingredients.map((ingredient) => {
                     if (
-                        recipes[index].ingredients[indexU].ingredient
+                        ingredient
                             .toLowerCase()
-                            .includes(ingredient[arrayIngredients].toLowerCase())
+                            .includes(ingredient.toLowerCase())
                     ) {
-                        results.add(recipes[index]);
+                        results.add(recipe);
                     }
-                }
-            }
-        }
+                });
+            });
+        });
 
         return Array.from(results);
     }

@@ -9,9 +9,10 @@ export class DevicesFilter {
 
     getDevices(recipes) {
         let listDevice = new Set();
-        for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
-            listDevice.add(recipes[recipeIndex].appliance.toLowerCase());
-        }
+
+        recipes.map((recipe) => {
+            listDevice.add(recipe.appliance.toLowerCase());
+        });
 
         return Array.from(listDevice);
     }
@@ -37,13 +38,12 @@ export class DevicesFilter {
         let results = new Set();
 
         // trie
-        for (let index = 0; index < recipes.length; index++) {
-            if (
-                recipes[index].appliance.toLowerCase().includes(device.toLowerCase())
-            ) {
-                results.add(recipes[index].appliance);
+
+        recipes.map((recipe) => {
+            if (recipe.appliance.toLowerCase().indexOf(device.toLowerCase()) !== -1) {
+                results.add(recipe.appliance);
             }
-        }
+        });
 
         this.devices = Array.from(results);
         this.render();

@@ -9,15 +9,12 @@ export class UstensilesFilter {
 
     getUstensiles(recipes) {
         let listUstensile = new Set();
-        for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
-            for (
-                let index = 0;
-                index < recipes[recipeIndex].ustensils.length;
-                index++
-            ) {
-                listUstensile.add(recipes[recipeIndex].ustensils[index]);
-            }
-        }
+
+        recipes.map((recipe) => {
+            recipe.ustensils.map((ustensil) => {
+                listUstensile.add(ustensil);
+            });
+        });
 
         return Array.from(listUstensile);
     }
@@ -43,17 +40,13 @@ export class UstensilesFilter {
         let results = new Set();
 
         // trie
-        for (let index = 0; index < recipes.length; index++) {
-            for (let indexU = 0; indexU < recipes[index].ustensils.length; indexU++) {
-                if (
-                    recipes[index].ustensils[indexU]
-                        .toLowerCase()
-                        .includes(ustensile.toLowerCase())
-                ) {
-                    results.add(recipes[index].ustensils[indexU].toLowerCase());
+        recipes.map((recipe) => {
+            recipe.ustensils.map((ustensil) => {
+                if (ustensil.toLowerCase().indexOf(ustensile.toLowerCase()) !== -1) {
+                    results.add(ustensil.toLowerCase());
                 }
-            }
-        }
+            });
+        });
 
         this.ustensiles = Array.from(results);
         this.render();
@@ -68,11 +61,9 @@ export class UstensilesFilter {
 
     listeners() {
         const inputUstensiles = document.getElementById("ustensiles");
-        document
-            .getElementById("comboboxUstensiles")
-            .addEventListener("click", (e) => {
-                this.toggle(inputUstensiles);
-            });
+        document.getElementById("comboboxUstensiles").addEventListener("click", (e) => {
+            this.toggle(inputUstensiles);
+        });
 
         //SearchBar Tag
         inputUstensiles.addEventListener("keydown", (e) => {
