@@ -12,9 +12,9 @@ class App {
     constructor(deviceFilter, ingredientsFilter, ustensilesFilter) {
         this.results = recipes;
         this.request = "";
-        this.device = new Set();
-        this.ustensile = new Set();
-        this.ingredient = new Set();
+        this.device = "";
+        this.ustensiles = new Set();
+        this.ingredients = new Set();
 
         this.deviceFilter = deviceFilter;
         this.ingredientsFilter = ingredientsFilter;
@@ -48,7 +48,7 @@ class App {
         const ingredients = document.querySelectorAll("#listIngredients li");
         ingredients.forEach((ingredient) => {
             ingredient.addEventListener("click", (e) => {
-                this.ingredient.add(ingredient.getAttribute("data-name"));
+                this.ingredients.add(ingredient.getAttribute("data-name"));
                 this.addTag(ingredient.getAttribute("data-name"), "primary");
             });
         });
@@ -56,7 +56,7 @@ class App {
         const devices = document.querySelectorAll("#listDevices li");
         devices.forEach((device) => {
             device.addEventListener("click", (e) => {
-                this.device.add(device.getAttribute("data-name"));
+                this.device = device.getAttribute("data-name");
                 this.addTag(device.getAttribute("data-name"), "success");
             });
         });
@@ -64,7 +64,7 @@ class App {
         const ustensiles = document.querySelectorAll("#listUstensiles li");
         ustensiles.forEach((ustensile) => {
             ustensile.addEventListener("click", (e) => {
-                this.ustensile.add(ustensile.getAttribute("data-name"));
+                this.ustensiles.add(ustensile.getAttribute("data-name"));
                 this.addTag(ustensile.getAttribute("data-name"), "danger");
             });
         });
@@ -75,14 +75,14 @@ class App {
                 const badge = element.closest(".badge");
                 console.log({badge});
 
-                if (Array.from(this.device).includes(badge.id)) {
-                    this.device.delete(badge.id);
+                if (this.device.includes(badge.id)) {
+                    this.device = "";
                 }
-                if (Array.from(this.ingredient).includes(badge.id)) {
-                    this.ingredient.delete(badge.id);
+                if (Array.from(this.ingredients).includes(badge.id)) {
+                    this.ingredients.delete(badge.id);
                 }
-                if (Array.from(this.ustensile).includes(badge.id)) {
-                    this.ustensile.delete(badge.id);
+                if (Array.from(this.ustensiles).includes(badge.id)) {
+                    this.ustensiles.delete(badge.id);
                 }
                 badge.remove();
                 this.querySearch();
@@ -111,17 +111,17 @@ class App {
             element.remove();
         });
 
-        this.search(this.request, this.device, this.ustensile, this.ingredient);
+        this.search(this.request, this.device, this.ustensiles, this.ingredients);
         this.render();
         this.listeners();
     }
 
-    search(request, device, ustensile, ingredients) {
+    search(request, device, ustensiles, ingredients) {
         let results = [];
 
         results = this.searchAllByRequest(request);
         results = this.searchByDevice(results, device);
-        results = this.searchByUstensile(results, ustensile);
+        results = this.searchByUstensile(results, ustensiles);
         results = this.searchByIngredient(results, ingredients);
 
         this.results = results;
@@ -157,34 +157,33 @@ class App {
 
     searchByDevice(recipes, device) {
         let results = new Set();
-        device = Array.from(device);
 
         // trie
-        for (let arrayDevices = 0; arrayDevices < device.length; arrayDevices++) {
-            for (let index = 0; index < recipes.length; index++) {
-                if (
-                    recipes[index].appliance.toLowerCase().includes(device[arrayDevices].toLowerCase())
-                ) {
-                    results.add(recipes[index]);
-                }
+        for (let index = 0; index < recipes.length; index++) {
+            if (
+                recipes[index].appliance.toLowerCase().includes(device.toLowerCase())
+            ) {
+                results.add(recipes[index]);
             }
         }
 
         return Array.from(results);
     }
 
-    searchByUstensile(recipes, ustensile) {
+    searchByUstensile(recipes, ustensiles) {
         let results = new Set();
-        ustensile = Array.from(ustensile);
+        ustensiles = Array.from(ustensiles)
+
+        if (ustensiles.length === 0) return recipes
 
         // trie
-        for (let arrayUstensiles = 0; arrayUstensiles < ustensile.length; arrayUstensiles++) {
+        for (let arrayUstensiles = 0; arrayUstensiles < ustensiles.length; arrayUstensiles++) {
             for (let index = 0; index < recipes.length; index++) {
                 for (let indexU = 0; indexU < recipes[index].ustensils.length; indexU++) {
                     if (
                         recipes[index].ustensils[indexU]
                             .toLowerCase()
-                            .includes(ustensile[arrayUstensiles].toLowerCase())
+                            .includes(ustensiles[arrayUstensiles].toLowerCase())
                     ) {
                         results.add(recipes[index]);
                     }
@@ -195,18 +194,20 @@ class App {
         return Array.from(results);
     }
 
-    searchByIngredient(recipes, ingredient) {
+    searchByIngredient(recipes, ingredients) {
         let results = new Set();
-        ingredient = Array.from(ingredient);
+        ingredients = Array.from(ingredients);
+
+        if (ingredients.length === 0) return recipes
 
         // trie
-        for (let arrayIngredients = 0; arrayIngredients < ingredient.length; arrayIngredients++) {
+        for (let arrayIngredients = 0; arrayIngredients < ingredients.length; arrayIngredients++) {
             for (let index = 0; index < recipes.length; index++) {
                 for (let indexU = 0; indexU < recipes[index].ingredients.length; indexU++) {
                     if (
                         recipes[index].ingredients[indexU].ingredient
                             .toLowerCase()
-                            .includes(ingredient[arrayIngredients].toLowerCase())
+                            .includes(ingredients[arrayIngredients].toLowerCase())
                     ) {
                         results.add(recipes[index]);
                     }

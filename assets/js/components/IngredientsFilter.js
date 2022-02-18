@@ -50,7 +50,7 @@ export class IngredientsFilter {
                 if (
                     recipes[index].ingredients[indexU].ingredient
                         .toLowerCase()
-                        .indexOf(ingredient.toLowerCase()) != -1
+                        .indexOf(ingredient.toLowerCase()) !== -1
                 ) {
                     results.add(
                         recipes[index].ingredients[indexU].ingredient.toLowerCase()
@@ -75,7 +75,7 @@ export class IngredientsFilter {
             const inputIngredients = document.getElementById("ingredients");
 
             document
-                .getElementById("comboboxIngredients")
+                .getElementById("btnIngredients")
                 .addEventListener("click", (e) => {
                     this.toggle(inputIngredients);
                 });

@@ -69,7 +69,7 @@ export class UstensilesFilter {
     listeners() {
         const inputUstensiles = document.getElementById("ustensiles");
         document
-            .getElementById("comboboxUstensiles")
+            .getElementById("btnUstentiles")
             .addEventListener("click", (e) => {
                 this.toggle(inputUstensiles);
             });

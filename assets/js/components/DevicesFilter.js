@@ -59,7 +59,7 @@ export class DevicesFilter {
     listeners() {
         const inputDevices = document.getElementById("devices");
         document
-            .getElementById("comboboxDevices")
+            .getElementById("btnDevices")
             .addEventListener("click", (e) => {
                 this.toggle(inputDevices);
             });
