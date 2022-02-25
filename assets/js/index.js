@@ -14,8 +14,8 @@ class App {
         this.request = "";
 
         this.device = new Set();
-        this.ustensile = new Set();
-        this.ingredient = new Set();
+        this.ustensiles = new Set();
+        this.ingredients = new Set();
 
         this.deviceFilter = deviceFilter;
         this.ingredientsFilter = ingredientsFilter;
@@ -47,9 +47,12 @@ class App {
         });
 
         const ingredients = document.querySelectorAll("#listIngredients li");
+        console.log('ingredient 1', ingredients)
         ingredients.forEach((ingredient) => {
+            console.log('ingredient 2', ingredient)
             ingredient.addEventListener("click", (e) => {
-                this.ingredient.add(ingredient.getAttribute("data-name"));
+                console.log('ingredient 3')
+                this.ingredients.add(ingredient.getAttribute("data-name"));
                 this.addTag(ingredient.getAttribute("data-name"), "primary");
             });
         });
@@ -65,7 +68,7 @@ class App {
         const ustensiles = document.querySelectorAll("#listUstensiles li");
         ustensiles.forEach((ustensile) => {
             ustensile.addEventListener("click", (e) => {
-                this.ustensile.add(ustensile.getAttribute("data-name"));
+                this.ustensiles.add(ustensile.getAttribute("data-name"));
                 this.addTag(ustensile.getAttribute("data-name"), "danger");
             });
         });
@@ -79,11 +82,11 @@ class App {
                 if (Array.from(this.device).includes(badge.id)) {
                     this.device.delete(badge.id);
                 }
-                if (Array.from(this.ingredient).includes(badge.id)) {
-                    this.ingredient.delete(badge.id);
+                if (Array.from(this.ingredients).includes(badge.id)) {
+                    this.ingredients.delete(badge.id);
                 }
-                if (Array.from(this.ustensile).includes(badge.id)) {
-                    this.ustensile.delete(badge.id);
+                if (Array.from(this.ustensiles).includes(badge.id)) {
+                    this.ustensiles.delete(badge.id);
                 }
                 badge.remove();
                 this.querySearch();
@@ -112,17 +115,17 @@ class App {
             element.remove();
         });
 
-        this.search(this.request, this.device, this.ustensile, this.ingredient);
+        this.search(this.request, this.device, this.ustensiles, this.ingredients);
         this.render();
         this.listeners();
     }
 
-    search(request, device, ustensile, ingredients) {
+    search(request, device, ustensiles, ingredients) {
         let results = [];
 
         results = this.searchAllByRequest(request);
-        results = this.searchByDevice(results, device);
-        results = this.searchByUstensile(results, ustensile);
+        //results = this.searchByDevice(results, device);
+        results = this.searchByUstensile(results, ustensiles);
         results = this.searchByIngredient(results, ingredients);
 
         this.results = results;
@@ -136,9 +139,9 @@ class App {
             const wordDescription = recipe.description.toLowerCase();
             let wordIngredient = [];
 
-            recipe.ingredients.map((ingredient) => {
+            recipe.ingredients.map((ingredients) => {
                 wordIngredient.push(
-                    ingredient.ingredient.toLowerCase()
+                    ingredients.ingredient.toLowerCase()
                 );
             });
 
@@ -168,48 +171,47 @@ class App {
             });
         });
         return Array.from(results);
+
+
     }
 
 
-    searchByUstensile(recipes, ustensile) {
+    searchByUstensile(recipes, ustensiles) {
         let results = new Set();
-        ustensile = Array.from(ustensile);
+        ustensiles = Array.from(ustensiles);
+
+        if (ustensiles.length === 0) return recipes
 
         // trie
-        ustensile.map((deviceName) => {
-            recipes.map((recipe) => {
-                recipe.ustensils.map((ustensil) => {
-                    if (
-                        ustensil
-                            .toLowerCase()
-                            .includes(ustensil.toLowerCase())
-                    ) {
-                        results.add(recipe);
-                    }
-                });
+        ustensiles.forEach((ustensile) => {
+            recipes.forEach((recipe) => {
+                results.add(recipe.ustensils.filter((item) => {
+                    console.log({item, ustensile}, item.toLowerCase().includes(ustensile.toLowerCase()))
+                    item.toLowerCase().includes(ustensile.toLowerCase())
+                }).length > 0);
             });
         });
+
         return Array.from(results);
     }
 
-    searchByIngredient(recipes, ingredient) {
+    searchByIngredient(recipes, ingredients) {
         let results = new Set();
-        ingredient = Array.from(ingredient);
+        ingredients = Array.from(ingredients);
 
         // trie
-        ingredient.map((ingredientName) => {
-            recipes.map((recipe) => {
-                recipe.ingredients.map((ingredient) => {
-                    if (
-                        ingredient
-                            .toLowerCase()
-                            .includes(ingredient.toLowerCase())
-                    ) {
-                        results.add(recipe);
-                    }
-                });
+        for (let recipe of recipes) {
+            let ingredientsMatch = [];
+            ingredients.forEach((ingredient) => {
+                ingredientsMatch.push(
+                    recipe.ingredients.filter((item) => item.ingredient.toLowerCase().includes(ingredient.toLowerCase())
+                    ).length > 0
+                );
             });
-        });
+            if (ingredientsMatch.every((match) => match)) {
+                results.add(recipe);
+            }
+        }
 
         return Array.from(results);
     }

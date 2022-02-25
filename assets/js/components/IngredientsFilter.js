@@ -61,16 +61,12 @@ export class IngredientsFilter {
     listeners() {
         window.addEventListener("DOMContentLoaded", () => {
             const inputIngredients = document.getElementById("ingredients");
-
-            document
-                .getElementById("comboboxIngredients")
-                .addEventListener("click", (e) => {
-                    this.toggle(inputIngredients);
-                });
+            document.getElementById("btnIngredients").addEventListener("click", (e) => {
+                this.toggle(inputIngredients);
+            });
 
             //SearchBar Tag
             inputIngredients.addEventListener("keydown", (e) => {
-                console.log(1)
                 if (inputIngredients.value.trim().length > 1) {
                     this.searchByIngredient(recipes, inputIngredients.value.trim());
                 } else {
@@ -97,9 +93,5 @@ export class IngredientsFilter {
             combobox.classList.remove("expanded");
             list.classList.add("d-none");
         }
-
-        const searchIngredient = document.getElementById("ingredients");
-        searchIngredient.addEventListener("keyup", () => {
-        });
     }
 }
