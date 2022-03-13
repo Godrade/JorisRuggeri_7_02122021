@@ -45,36 +45,42 @@
 
             </div>
             <div class="col-12 d-flex">
-                <div class="combobox combobox-primary me-2" data-filter="ingredients" id="comboboxIngredients">
-                    <div class="combobox-wrapper">
-                        <div class="combobox-control">
-                            <label for="ingredients" class="combobox-control-label" id="labelIngredients" data-filter-label>Ingredients</label>
-                            <input type="text" placeholder="Rechercher un ingredient" class="combobox-control-input d-none" id="ingredients" data-filter-input>
-                            <button class="combobox-control-expand" data-filter-expand id="btnIngredients"><i class="fas fa-chevron-up text-white"></i></button>
+                <div class="row">
+                    <div class="col-auto">
+                        <div class="combobox combobox-primary me-2" data-filter="ingredients" id="comboboxIngredients">
+                            <div class="combobox-wrapper">
+                                <div class="combobox-control">
+                                    <label for="ingredients" class="combobox-control-label" id="labelIngredients" data-filter-label>Ingredients</label>
+                                    <input type="text" placeholder="Rechercher un ingredient" class="combobox-control-input d-none" id="ingredients" data-filter-input>
+                                    <button class="combobox-control-expand" data-filter-expand id="btnIngredients"><i class="fas fa-chevron-up text-white"></i></button>
+                                </div>
+                                <ul class="combobox-results d-none" data-filter-results id="listIngredients"></ul>
+                            </div>
                         </div>
-                        <ul class="combobox-results d-none" data-filter-results id="listIngredients"></ul>
                     </div>
-                </div>
-
-                <div class="combobox combobox-success me-2" data-filter="devices" id="comboboxDevices">
-                    <div class="combobox-wrapper">
-                        <div class="combobox-control">
-                            <label for="devices" class="combobox-control-label" id="labelDevices" data-filter-label>Appareil</label>
-                            <input type="text" placeholder="Rechercher un appareil" class="combobox-control-input d-none" id="devices" data-filter-input>
-                            <button class="combobox-control-expand" data-filter-expand id="btnDevices"><i class="fas fa-chevron-up text-white"></i></button>
+                    <div class="col-auto">
+                        <div class="combobox combobox-success me-2" data-filter="devices" id="comboboxDevices">
+                            <div class="combobox-wrapper">
+                                <div class="combobox-control">
+                                    <label for="devices" class="combobox-control-label" id="labelDevices" data-filter-label>Appareil</label>
+                                    <input type="text" placeholder="Rechercher un appareil" class="combobox-control-input d-none" id="devices" data-filter-input>
+                                    <button class="combobox-control-expand" data-filter-expand id="btnDevices"><i class="fas fa-chevron-up text-white"></i></button>
+                                </div>
+                                <ul class="combobox-results d-none" data-filter-results id="listDevices"></ul>
+                            </div>
                         </div>
-                        <ul class="combobox-results d-none" data-filter-results id="listDevices"></ul>
                     </div>
-                </div>
-
-                <div class="combobox combobox-danger" data-filter="ustensiles" id="comboboxUstensiles">
-                    <div class="combobox-wrapper">
-                        <div class="combobox-control">
-                            <label for="ustensiles" class="combobox-control-label" id="labelUstensiles" data-filter-label>Ustensiles</label>
-                            <input type="text" placeholder="Rechercher un ustensiles" class="combobox-control-input d-none" id="ustensiles" data-filter-input>
-                            <button class="combobox-control-expand" data-filter-expand id="btnUstentiles"><i class="fas fa-chevron-up text-white"></i></button>
+                    <div class="col-auto">
+                        <div class="combobox combobox-danger" data-filter="ustensiles" id="comboboxUstensiles">
+                            <div class="combobox-wrapper">
+                                <div class="combobox-control">
+                                    <label for="ustensiles" class="combobox-control-label" id="labelUstensiles" data-filter-label>Ustensiles</label>
+                                    <input type="text" placeholder="Rechercher un ustensiles" class="combobox-control-input d-none" id="ustensiles" data-filter-input>
+                                    <button class="combobox-control-expand" data-filter-expand id="btnUstentiles"><i class="fas fa-chevron-up text-white"></i></button>
+                                </div>
+                                <ul class="combobox-results d-none" data-filter-results id="listUstensiles"></ul>
+                            </div>
                         </div>
-                        <ul class="combobox-results d-none" data-filter-results id="listUstensiles"></ul>
                     </div>
                 </div>
             </div>

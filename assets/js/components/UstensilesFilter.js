@@ -1,4 +1,5 @@
-import {recipes} from "../data/recipes";
+import {recipes} from "../data/recipes.js";
+import {addTag} from "../helpers.js";
 
 export class UstensilesFilter {
     constructor() {
@@ -73,6 +74,14 @@ export class UstensilesFilter {
                 this.ustensiles = this.getUstensiles(recipes);
                 this.render();
             }
+        });
+
+        document.getElementById("ustensiles").addEventListener("change", () => {
+            document.querySelectorAll("#listUstensiles li").forEach((ustensile) => {
+                ustensile.addEventListener("click", (e) => {
+                    addTag(e.target.getAttribute("data-name"), "danger");
+                });
+            });
         });
     }
 

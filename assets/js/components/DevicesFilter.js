@@ -1,4 +1,5 @@
-import {recipes} from "../data/recipes";
+import {recipes} from "../data/recipes.js";
+import {addTag} from "../helpers.js";
 
 export class DevicesFilter {
     constructor() {
@@ -70,6 +71,14 @@ export class DevicesFilter {
                 this.devices = this.getDevices(recipes);
                 this.render();
             }
+        });
+
+        document.getElementById("devices").addEventListener("change", () => {
+            document.querySelectorAll("#listDevices li").forEach((device) => {
+                device.addEventListener("click", (e) => {
+                    addTag(e.target.getAttribute("data-name"), "success");
+                });
+            });
         });
     }
 

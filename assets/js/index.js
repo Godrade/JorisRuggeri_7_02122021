@@ -2,6 +2,7 @@ import {RecipeResults} from "./components/RecipeResults.js";
 import {DevicesFilter} from "./components/DevicesFilter.js";
 import {UstensilesFilter} from "./components/UstensilesFilter.js";
 import {IngredientsFilter} from "./components/IngredientsFilter.js";
+import {addTag} from "./helpers.js";
 import {recipes} from "./data/recipes.js";
 
 class App {
@@ -46,30 +47,54 @@ class App {
             }
         });
 
-        const ingredients = document.querySelectorAll("#listIngredients li");
-        console.log('ingredient 1', ingredients)
-        ingredients.forEach((ingredient) => {
-            console.log('ingredient 2', ingredient)
+        document.querySelectorAll("#listIngredients li").forEach((ingredient) => {
             ingredient.addEventListener("click", (e) => {
-                console.log('ingredient 3')
-                this.ingredients.add(ingredient.getAttribute("data-name"));
-                this.addTag(ingredient.getAttribute("data-name"), "primary");
+                this.ingredients.add(e.target.getAttribute("data-name"));
+                addTag(e.target.getAttribute("data-name"), "primary");
+                this.querySearch();
             });
         });
 
-        const devices = document.querySelectorAll("#listDevices li");
-        devices.forEach((device) => {
+        document.getElementById("ingredients").addEventListener("change", () => {
+            document.querySelectorAll("#listIngredients li").forEach((ingredient) => {
+                ingredient.addEventListener("click", (e) => {
+                    this.ingredients.add(e.target.getAttribute("data-name"));
+                    this.querySearch();
+                });
+            });
+        });
+
+        document.querySelectorAll("#listDevices li").forEach((device) => {
             device.addEventListener("click", (e) => {
-                this.device.add(device.getAttribute("data-name"));
-                this.addTag(device.getAttribute("data-name"), "success");
+                this.device.add(e.target.getAttribute("data-name"));
+                addTag(e.target.getAttribute("data-name"), "success");
+                this.querySearch();
             });
         });
 
-        const ustensiles = document.querySelectorAll("#listUstensiles li");
-        ustensiles.forEach((ustensile) => {
+        document.getElementById("devices").addEventListener("change", () => {
+            document.querySelectorAll("#listDevices li").forEach((device) => {
+                device.addEventListener("click", (e) => {
+                    this.device.add(e.target.getAttribute("data-name"));
+                    this.querySearch();
+                });
+            });
+        });
+
+        document.querySelectorAll("#listUstensiles li").forEach((ustensile) => {
             ustensile.addEventListener("click", (e) => {
-                this.ustensiles.add(ustensile.getAttribute("data-name"));
-                this.addTag(ustensile.getAttribute("data-name"), "danger");
+                this.ustensiles.add(e.target.getAttribute("data-name"));
+                addTag(e.target.getAttribute("data-name"), "danger");
+                this.querySearch();
+            });
+        });
+
+        document.getElementById("ustensiles").addEventListener("change", () => {
+            document.querySelectorAll("#listUstensiles li").forEach((ustensile) => {
+                ustensile.addEventListener("click", (e) => {
+                    this.ustensiles.add(e.target.getAttribute("data-name"));
+                    this.querySearch();
+                });
             });
         });
 
@@ -94,21 +119,6 @@ class App {
         });
     }
 
-    addTag(tagName, color) {
-        const tagSection = document.getElementById("tagSection");
-        const tag = document.createElement("span");
-        tag.className = `badge rounded-pill bg-${color} me-1`;
-        tag.id = tagName;
-        tag.dataset.name = tagName;
-
-        const templatePage = `${tagName} <i class="far fa-times-circle"></i>`;
-
-        tagSection.appendChild(tag);
-        tag.innerHTML = templatePage;
-
-        this.querySearch();
-    }
-
     querySearch() {
         let recipeItem = document.querySelectorAll(".recipe");
         recipeItem.forEach((element) => {
@@ -124,7 +134,7 @@ class App {
         let results = [];
 
         results = this.searchAllByRequest(request);
-        //results = this.searchByDevice(results, device);
+        results = this.searchByDevice(results, device);
         results = this.searchByUstensile(results, ustensiles);
         results = this.searchByIngredient(results, ingredients);
 
@@ -156,23 +166,21 @@ class App {
         return results;
     }
 
-    searchByDevice(recipes, device) {
+    searchByDevice(recipes, devices) {
         let results = new Set();
-        device = Array.from(device);
+        devices = Array.from(devices);
+
+        if (devices.length === 0) return recipes;
 
         // trie
-        device.map((deviceName) => {
-            recipes.map((recipe) => {
-                if (
-                    recipe.appliance.toLowerCase().includes(deviceName.toLowerCase())
-                ) {
+        devices.forEach((deviceName) => {
+            recipes.forEach((recipe) => {
+                if (recipe.appliance.toLowerCase().includes(deviceName.toLowerCase())) {
                     results.add(recipe);
                 }
             });
         });
         return Array.from(results);
-
-
     }
 
 
@@ -180,17 +188,22 @@ class App {
         let results = new Set();
         ustensiles = Array.from(ustensiles);
 
-        if (ustensiles.length === 0) return recipes
+        if (ustensiles.length === 0) return recipes;
 
         // trie
-        ustensiles.forEach((ustensile) => {
-            recipes.forEach((recipe) => {
-                results.add(recipe.ustensils.filter((item) => {
-                    console.log({item, ustensile}, item.toLowerCase().includes(ustensile.toLowerCase()))
-                    item.toLowerCase().includes(ustensile.toLowerCase())
-                }).length > 0);
+        for (let recipe of recipes) {
+            let ustensilesMatch = [];
+            ustensiles.forEach((ustensile) => {
+                ustensilesMatch.push(
+                    recipe.ustensils.filter((item) =>
+                        item.toLowerCase().includes(ustensile.toLowerCase())
+                    ).length > 0
+                );
             });
-        });
+            if (ustensilesMatch.every((match) => match)) {
+                results.add(recipe);
+            }
+        }
 
         return Array.from(results);
     }
@@ -204,7 +217,8 @@ class App {
             let ingredientsMatch = [];
             ingredients.forEach((ingredient) => {
                 ingredientsMatch.push(
-                    recipe.ingredients.filter((item) => item.ingredient.toLowerCase().includes(ingredient.toLowerCase())
+                    recipe.ingredients.filter((item) =>
+                        item.ingredient.toLowerCase().includes(ingredient.toLowerCase())
                     ).length > 0
                 );
             });

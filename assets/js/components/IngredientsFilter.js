@@ -1,4 +1,5 @@
-import {recipes} from "../data/recipes";
+import {recipes} from "../data/recipes.js";
+import {addTag} from "../helpers.js";
 
 export class IngredientsFilter {
     constructor(recipes) {
@@ -59,20 +60,26 @@ export class IngredientsFilter {
     }
 
     listeners() {
-        window.addEventListener("DOMContentLoaded", () => {
-            const inputIngredients = document.getElementById("ingredients");
-            document.getElementById("btnIngredients").addEventListener("click", (e) => {
-                this.toggle(inputIngredients);
-            });
+        const inputIngredients = document.getElementById("ingredients");
+        document.getElementById("btnIngredients").addEventListener("click", (e) => {
+            this.toggle(inputIngredients);
+        });
 
-            //SearchBar Tag
-            inputIngredients.addEventListener("keydown", (e) => {
-                if (inputIngredients.value.trim().length > 1) {
-                    this.searchByIngredient(recipes, inputIngredients.value.trim());
-                } else {
-                    this.ingredients = this.getIngredients(recipes);
-                    this.render();
-                }
+        //SearchBar Tag
+        inputIngredients.addEventListener("keydown", (e) => {
+            if (inputIngredients.value.trim().length > 1) {
+                this.searchByIngredient(recipes, inputIngredients.value.trim());
+            } else {
+                this.ingredients = this.getIngredients(recipes);
+                this.render();
+            }
+        });
+
+        document.getElementById("ingredients").addEventListener("change", () => {
+            document.querySelectorAll("#listIngredients li").forEach((ingredient) => {
+                ingredient.addEventListener("click", (e) => {
+                    addTag(e.target.getAttribute("data-name"), "primary");
+                });
             });
         });
     }

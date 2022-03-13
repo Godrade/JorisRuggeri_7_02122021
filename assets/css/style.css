@@ -28,6 +28,10 @@
   /* white-space: nowrap; */
 }
 
+.card-description:hover {
+  max-height: fit-content;
+}
+
  .combobox {
   position: relative;
   display: flex;
@@ -54,6 +58,11 @@
   border-radius: 0.3125rem;
   color: #FFFFFF;
 }
+
+.combobox.expanded .combobox-wrapper {
+  z-index: 9999;
+}
+
 .combobox-primary .combobox-wrapper {
   background-color: #3282F7;
 }
@@ -164,4 +173,19 @@
 .combobox-success .combobox-results::-webkit-scrollbar-thumb {
   border: 1px solid #68D9A4;
   background: #50d395;
+}
+
+@media (max-width: 400px) {
+  .combobox {
+    width: 360px;
+    margin-bottom: 10px;
+  }
+
+  .combobox.expanded {
+    width: 360px;
+  }
+
+  .combobox.expanded .combobox-results {
+    grid-template-columns: repeat(2,1fr);
+  }
 }
