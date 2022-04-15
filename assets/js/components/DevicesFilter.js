@@ -23,14 +23,14 @@ export class DevicesFilter {
             this.devices = this.getDevices(recipes);
         }
 
-        this.devices.forEach((device) => {
+        for (let index = 0; index < this.devices.length; index++) {
             const listSection = document.getElementById("listDevices");
             const liElt = document.createElement("li");
-            liElt.dataset.name = device;
+            liElt.dataset.name = this.devices[index];
 
-            liElt.textContent = device;
+            liElt.textContent = this.devices[index];
             listSection.appendChild(liElt);
-        });
+        }
     }
 
     searchByDevices(recipes, device) {
@@ -51,9 +51,9 @@ export class DevicesFilter {
 
     remove() {
         let recipeItem = document.querySelectorAll("#listDevices li");
-        recipeItem.forEach((element) => {
-            element.remove();
-        });
+        for (let index = 0; index < recipeItem.length; index++) {
+            recipeItem[index].remove();
+        }
     }
 
     listeners() {

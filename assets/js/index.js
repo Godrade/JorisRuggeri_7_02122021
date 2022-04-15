@@ -46,34 +46,34 @@ class App {
         });
 
         const ingredients = document.querySelectorAll("#listIngredients li");
-        ingredients.forEach((ingredient) => {
-            ingredient.addEventListener("click", (e) => {
-                this.ingredients.add(ingredient.getAttribute("data-name"));
-                this.addTag(ingredient.getAttribute("data-name"), "primary");
+        for (let index = 0; index < ingredients.length; index++) {
+            ingredients[index].addEventListener("click", (e) => {
+                this.ingredients.add(ingredients[index].getAttribute("data-name"));
+                this.addTag(ingredients[index].getAttribute("data-name"), "primary");
             });
-        });
+        }
 
         const devices = document.querySelectorAll("#listDevices li");
-        devices.forEach((device) => {
-            device.addEventListener("click", (e) => {
-                this.device = device.getAttribute("data-name");
-                this.addTag(device.getAttribute("data-name"), "success");
+        for (let index = 0; index < devices.length; index++) {
+            devices[index].addEventListener("click", (e) => {
+                this.device = devices[index].getAttribute("data-name");
+                this.addTag(devices[index].getAttribute("data-name"), "success");
             });
-        });
+        }
+
 
         const ustensiles = document.querySelectorAll("#listUstensiles li");
-        ustensiles.forEach((ustensile) => {
-            ustensile.addEventListener("click", (e) => {
-                this.ustensiles.add(ustensile.getAttribute("data-name"));
-                this.addTag(ustensile.getAttribute("data-name"), "danger");
+        for (let index = 0; index < ustensiles.length; index++) {
+            ustensiles[index].addEventListener("click", (e) => {
+                this.ustensiles.add(ustensiles[index].getAttribute("data-name"));
+                this.addTag(ustensiles[index].getAttribute("data-name"), "danger");
             });
-        });
+        }
 
         const tagList = document.querySelectorAll(".badge i");
-        tagList.forEach((element) => {
-            element.addEventListener("click", (e) => {
-                const badge = element.closest(".badge");
-                console.log({badge});
+        for (let index = 0; index < tagList.length; index++) {
+            tagList[index].addEventListener("click", (e) => {
+                const badge = tagList[index].closest(".badge");
 
                 if (this.device.includes(badge.id)) {
                     this.device = "";
@@ -87,7 +87,7 @@ class App {
                 badge.remove();
                 this.querySearch();
             });
-        });
+        }
     }
 
     addTag(tagName, color) {
@@ -107,9 +107,9 @@ class App {
 
     querySearch() {
         let recipeItem = document.querySelectorAll(".recipe");
-        recipeItem.forEach((element) => {
-            element.remove();
-        });
+        for (let index = 0; index < recipeItem.length; index++) {
+            recipeItem[index].remove();
+        }
 
         this.search(this.request, this.device, this.ustensiles, this.ingredients);
         this.render();

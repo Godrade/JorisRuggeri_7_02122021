@@ -29,14 +29,14 @@ export class UstensilesFilter {
             this.ustensiles = this.getUstensiles(recipes);
         }
 
-        this.ustensiles.forEach((ustensile) => {
+        for (let index = 0; index < this.ustensiles.length; index++) {
             const listSection = document.getElementById("listUstensiles");
             const liElt = document.createElement("li");
-            liElt.dataset.name = ustensile;
+            liElt.dataset.name = this.ustensiles[index];
 
-            liElt.textContent = ustensile;
+            liElt.textContent = this.ustensiles[index];
             listSection.appendChild(liElt);
-        });
+        }
     }
 
     searchByUstensile(recipes, ustensile) {
@@ -61,9 +61,9 @@ export class UstensilesFilter {
 
     remove() {
         let recipeItem = document.querySelectorAll("#listUstensiles li");
-        recipeItem.forEach((element) => {
-            element.remove();
-        });
+        for (let index = 0; index < recipeItem.length; index++) {
+            recipeItem[index].remove();
+        }
     }
 
     listeners() {

@@ -27,14 +27,15 @@ export class IngredientsFilter {
             this.ingredients = this.getIngredients(recipes);
         }
         this.remove();
-        this.ingredients.forEach((ingredient) => {
+
+        for (let index = 0; index < this.ingredients.length; index++) {
             const listSection = document.getElementById("listIngredients");
             const liElt = document.createElement("li");
-            liElt.dataset.name = ingredient;
+            liElt.dataset.name = this.ingredients[index];
 
-            liElt.textContent = ingredient;
+            liElt.textContent = this.ingredients[index];
             listSection.appendChild(liElt);
-        });
+        }
     }
 
     searchByIngredient(recipes, ingredient) {
@@ -65,9 +66,9 @@ export class IngredientsFilter {
 
     remove() {
         let recipeItem = document.querySelectorAll("#listIngredients li");
-        recipeItem.forEach((element) => {
-            element.remove();
-        });
+        for (let index = 0; index < recipeItem.length; index++) {
+            recipeItem[index].remove();
+        }
     }
 
     listeners() {
@@ -82,7 +83,6 @@ export class IngredientsFilter {
 
             //SearchBar Tag
             inputIngredients.addEventListener("keydown", (e) => {
-                console.log(1)
                 if (inputIngredients.value.trim().length > 1) {
                     this.searchByIngredient(recipes, inputIngredients.value.trim());
                 } else {
